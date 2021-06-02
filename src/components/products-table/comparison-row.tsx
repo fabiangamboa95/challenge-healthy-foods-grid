@@ -1,5 +1,5 @@
 import { Product, ProductId, ProductPropertyEntryDTO } from '@/api/types'
-import { Chip, makeStyles, TableRow } from '@material-ui/core'
+import { Chip, useTheme, TableRow } from '@material-ui/core'
 import React from 'react'
 import StyledTableCell from './styled-table-cell'
 
@@ -9,18 +9,8 @@ interface ComparisonRowProps {
   productProps: ProductPropertyEntryDTO[]
 }
 
-const useStyles = makeStyles((theme) => ({
-  minor: {
-    backgroundColor: theme.palette.secondary.main,
-    textDecoration: 'line-through'
-  },
-  mayor: {
-    backgroundColor: theme.palette.primary.main
-  }
-}))
-
 const ComparisonRow: React.FC<ComparisonRowProps> = ({ selected, products, productProps }) => {
-  const classes = useStyles()
+  const theme = useTheme()
   const product1 = products.find((product) => product.id === selected[0])
   const product2 = products.find((product) => product.id === selected[1])
 
@@ -34,18 +24,23 @@ const ComparisonRow: React.FC<ComparisonRowProps> = ({ selected, products, produ
             </StyledTableCell>
           )
         if (productProp.name === 'tags') return <StyledTableCell key={productProp.name}>-</StyledTableCell>
-        console.log(product1[productProp.name], product2[productProp.name])
         if (product1[productProp.name] === product2[productProp.name])
           return <StyledTableCell key={productProp.name}>{product1[productProp.name] || '-'}</StyledTableCell>
         return (
           <StyledTableCell key={productProp.name}>
-            <Chip size="small" label={product1[productProp.name] || '-'} className={classes.minor} />
+            <Chip
+              size="small"
+              label={product1[productProp.name] || '-'}
+              style={{
+                backgroundColor: theme.palette.secondary.main,
+                textDecoration: 'line-through'
+              }}
+            />
             <br />
             <Chip
               size="small"
               label={product2[productProp.name] || '-'}
-              className={classes.mayor}
-              style={{ marginTop: 2 }}
+              style={{ backgroundColor: theme.palette.primary.main, marginTop: 2 }}
             />
           </StyledTableCell>
         )
