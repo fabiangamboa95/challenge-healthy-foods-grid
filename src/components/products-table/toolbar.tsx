@@ -1,10 +1,11 @@
 import React from 'react'
-import { Button, IconButton, makeStyles, Toolbar, Tooltip, Typography } from '@material-ui/core'
+import { Button, IconButton, makeStyles, Toolbar, Typography } from '@material-ui/core'
 import { ClearAll } from '@material-ui/icons'
 
 interface ToolbarProps {
   numSelected: number
   onClearClick: () => void
+  onComparisonClick: () => void
 }
 
 const useStyles = makeStyles(() => ({
@@ -19,7 +20,7 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const MyToolbar: React.FC<ToolbarProps> = ({ numSelected, onClearClick }) => {
+const MyToolbar: React.FC<ToolbarProps> = ({ numSelected, onClearClick, onComparisonClick }) => {
   const classes = useStyles()
   const _2selected = numSelected === 2
 
@@ -33,7 +34,7 @@ const MyToolbar: React.FC<ToolbarProps> = ({ numSelected, onClearClick }) => {
           numSelected > 1 ? 's' : ''
         } selected`}</Typography>
       )}
-      <Button variant="contained" className={classes.button} disabled={!_2selected}>
+      <Button variant="contained" className={classes.button} disabled={!_2selected} onClick={onComparisonClick}>
         {_2selected ? 'compare products' : 'select 2 products to compare'}
       </Button>
     </Toolbar>

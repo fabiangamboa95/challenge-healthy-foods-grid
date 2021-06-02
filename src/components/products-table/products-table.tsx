@@ -8,7 +8,6 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  withStyles,
   TablePagination,
   TableHead,
   useMediaQuery,
@@ -17,6 +16,8 @@ import {
 import React, { useEffect, useState } from 'react'
 import produce from 'immer'
 import Toolbar from './toolbar'
+import ComparisonRow from './comparison-row'
+import StyledTableCell from './styled-table-cell'
 
 const useStyles = makeStyles(() => ({
   table: {
@@ -26,16 +27,6 @@ const useStyles = makeStyles(() => ({
     maxHeight: '50vh'
   }
 }))
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white
-  },
-  body: {
-    fontSize: 14
-  }
-}))(TableCell)
 
 const ProductsTable: React.FC = () => {
   const classes = useStyles()
@@ -69,6 +60,7 @@ const ProductsTable: React.FC = () => {
         if (selectedDraft.length > 2) {
           selectedDraft.splice(0, 1)
         }
+        if (selectedDraft.length < 2) setShowComparison(false)
       })
     )
 
@@ -82,7 +74,14 @@ const ProductsTable: React.FC = () => {
 
   return (
     <Paper>
-      <Toolbar numSelected={selected.length} onClearClick={() => setSelected([])} />
+      <Toolbar
+        numSelected={selected.length}
+        onClearClick={() => {
+          setSelected([])
+          setShowComparison(false)
+        }}
+        onComparisonClick={() => setShowComparison(true)}
+      />
       <TableContainer className={classes.table}>
         <Table size={upMd ? 'medium' : 'small'} stickyHeader>
           <TableHead>
@@ -91,6 +90,7 @@ const ProductsTable: React.FC = () => {
                 <StyledTableCell key={index}>{prop.label}</StyledTableCell>
               ))}
             </TableRow>
+            {showComparison && <ComparisonRow selected={selected} products={products} productProps={productProps} />}
           </TableHead>
           <TableBody>
             {products.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map((product) => (
