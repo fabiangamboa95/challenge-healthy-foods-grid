@@ -1,4 +1,4 @@
-export type ProductId = number
+export type ProductId = string
 
 interface ProductNutritionDTO {
   energy: number
