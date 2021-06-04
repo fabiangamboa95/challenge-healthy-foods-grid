@@ -4,8 +4,8 @@ import { ClearAll } from '@material-ui/icons'
 
 interface ToolbarProps {
   numSelected: number
-  onClearClick: () => void
-  onComparisonClick: () => void
+  onClearClick: React.MouseEventHandler
+  onComparisonClick: React.MouseEventHandler
 }
 
 const MyToolbar: React.FC<ToolbarProps> = ({ numSelected, onClearClick, onComparisonClick }) => {

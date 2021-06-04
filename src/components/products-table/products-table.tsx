@@ -9,7 +9,8 @@ import {
   TablePagination,
   TableHead,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Typography
 } from '@material-ui/core'
 import React, { useState } from 'react'
 import produce from 'immer'
@@ -27,7 +28,7 @@ const ProductsTable: React.FC<ProductsTableProps> = (props) => {
   const [selected, setSelected] = useState<ProductId[]>([])
   const [showComparison, setShowComparison] = useState(false)
 
-  const onRowClick = (productId) =>
+  const onRowClick = (productId: ProductId) =>
     setSelected(
       produce(selected, (selectedDraft) => {
         const index = selectedDraft.indexOf(productId)
@@ -43,10 +44,12 @@ const ProductsTable: React.FC<ProductsTableProps> = (props) => {
       })
     )
 
-  const inSelected = (productId) => {
+  const isSelected = (productId: ProductId) => {
     const index = selected.indexOf(productId)
     return index > -1
   }
+
+  if (!products || !productProperties) return <Typography variant="h2">Error Loading!</Typography>
 
   return (
     <Paper>
@@ -79,10 +82,10 @@ const ProductsTable: React.FC<ProductsTableProps> = (props) => {
           </TableHead>
           <TableBody>
             {products.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map((product) => (
-              <TableRow key={product.id} hover selected={inSelected(product.id)} onClick={() => onRowClick(product.id)}>
+              <TableRow key={product.id} hover selected={isSelected(product.id)} onClick={() => onRowClick(product.id)}>
                 {productProperties.map((prop) => {
                   let value = product[prop.name] || '-'
-                  if (prop.name == 'tags' && value !== '-') {
+                  if (prop.name === 'tags' && value !== '-') {
                     value = (value as string[]).join(', ')
                   }
 

@@ -1,6 +1,6 @@
 import { Product, ProductId, ProductPropertyEntryDTO } from '@/api/types'
 import { Chip, useTheme, TableRow } from '@material-ui/core'
-import React from 'react'
+import React, { useMemo } from 'react'
 import StyledTableCell from './styled-table-cell'
 
 interface ComparisonRowProps {
@@ -11,8 +11,8 @@ interface ComparisonRowProps {
 
 const ComparisonRow: React.FC<ComparisonRowProps> = ({ selected, products, productProps }) => {
   const theme = useTheme()
-  const product1 = products.find((product) => product.id === selected[0])
-  const product2 = products.find((product) => product.id === selected[1])
+  const product1 = useMemo(() => products.find((product) => product.id === selected[0]), [selected, products])
+  const product2 = useMemo(() => products.find((product) => product.id === selected[1]), [selected, products])
 
   return (
     <TableRow>
